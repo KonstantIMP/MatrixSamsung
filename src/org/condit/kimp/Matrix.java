@@ -40,8 +40,8 @@ public class Matrix {
     }
 
     public Matrix sum(Matrix m) throws Exception {
-        if ((p.length != m.p.length) || (p.length != 0 && p[0].length != m.p[0].length)) throw new Exception("Incorrect matrix size");
-        int [][] res = new int[p.length][p[0].length];
+        if (dimension.getColumns() != m.dimension.getColumns() || dimension.getRows() != m.dimension.getRows()) throw new Exception("Incorrect matrix size");
+        int [][] res = new int[dimension.getRows()][dimension.getColumns()];
 
         for (int i = 0; i < p.length; i++) {
             for (int j = 0; j < p[i].length; j++) {
@@ -53,8 +53,8 @@ public class Matrix {
     }
 
     public Matrix sub(Matrix m) throws Exception {
-        if ((p.length != m.p.length) || (p.length != 0 && p[0].length != m.p[0].length)) throw new Exception("Incorrect matrix size");
-        int [][] res = new int[p.length][p[0].length];
+        if (dimension.getColumns() != m.dimension.getColumns() || dimension.getRows() != m.dimension.getRows()) throw new Exception("Incorrect matrix size");
+        int [][] res = new int[dimension.getRows()][dimension.getColumns()];
 
         for (int i = 0; i < p.length; i++) {
             for (int j = 0; j < p[i].length; j++) {
@@ -66,7 +66,7 @@ public class Matrix {
     }
 
     public Matrix mul(int m){
-        int [][] res = new int[p.length][p.length != 0 ? p[0].length : 0];
+        int [][] res = new int[dimension.getRows()][dimension.getColumns()];
 
         for (int i = 0; i < p.length; i++) {
             for (int j = 0; j < p[i].length; j++) {
@@ -75,23 +75,5 @@ public class Matrix {
         }
 
         return new Matrix(res);
-    }
-
-
-    private static class Dimension {
-        private int rows;
-        private int columns;
-
-        public Dimension(int r, int c){
-            rows = r; columns = c;
-        }
-
-        public int getRows() {
-            return rows;
-        }
-
-        public int getColumns() {
-            return columns;
-        }
     }
 }

@@ -43,8 +43,8 @@ public class Matrix {
         if (dimension.getColumns() != m.dimension.getColumns() || dimension.getRows() != m.dimension.getRows()) throw new Exception("Incorrect matrix size");
         int [][] res = new int[dimension.getRows()][dimension.getColumns()];
 
-        for (int i = 0; i < p.length; i++) {
-            for (int j = 0; j < p[i].length; j++) {
+        for (int i = 0; i < dimension.getRows(); i++) {
+            for (int j = 0; j < dimension.getColumns(); j++) {
                 res[i][j] = p[i][j] + m.p[i][j];
             }
         }
@@ -56,8 +56,8 @@ public class Matrix {
         if (dimension.getColumns() != m.dimension.getColumns() || dimension.getRows() != m.dimension.getRows()) throw new Exception("Incorrect matrix size");
         int [][] res = new int[dimension.getRows()][dimension.getColumns()];
 
-        for (int i = 0; i < p.length; i++) {
-            for (int j = 0; j < p[i].length; j++) {
+        for (int i = 0; i < dimension.getRows(); i++) {
+            for (int j = 0; j < dimension.getColumns(); j++) {
                 res[i][j] = p[i][j] - m.p[i][j];
             }
         }
@@ -68,12 +68,68 @@ public class Matrix {
     public Matrix mul(int m){
         int [][] res = new int[dimension.getRows()][dimension.getColumns()];
 
-        for (int i = 0; i < p.length; i++) {
-            for (int j = 0; j < p[i].length; j++) {
+        for (int i = 0; i < dimension.getRows(); i++) {
+            for (int j = 0; j < dimension.getColumns(); j++) {
                 res[i][j] = p[i][j] * m;
             }
         }
 
         return new Matrix(res);
+    }
+
+    public int max() {
+        if (dimension.getColumns() == 0 || dimension.getRows() == 0) return 0;
+        int m = p[0][0];
+        for(int i = 0; i < dimension.getRows(); i++) {
+            for (int j = 0; j < dimension.getColumns(); j++) {
+                m = Math.max(m, p[i][j]);
+            }
+        }
+        return m;
+    }
+
+    public int min() {
+        if (dimension.getColumns() == 0 || dimension.getRows() == 0) return 0;
+        int m = p[0][0];
+        for(int i = 0; i < dimension.getRows(); i++) {
+            for (int j = 0; j < dimension.getColumns(); j++) {
+                m = Math.min(m, p[i][j]);
+            }
+        }
+        return m;
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder builder = new StringBuilder();
+
+        int num = String.valueOf(this.max()).length();
+
+        for (int i = 0; i < dimension.getRows(); i++) {
+            for (int j = 0; j < dimension.getColumns(); j++) {
+                String n = String.valueOf(p[i][j]);
+                for (int k = 0; k < num - n.length(); k++) builder.append(" ");
+                builder.append(n + " ");
+            }
+            builder.append("\n");
+        }
+
+        return builder.toString();
+    }
+
+    public String toLine() {
+        StringBuilder builder = new StringBuilder();
+
+        int counter = dimension.getColumns() * dimension.getRows();
+
+        for (int i = 0; i < dimension.getRows(); i++) {
+            for (int j = 0; j < dimension.getColumns(); j++) {
+                builder.append(String.valueOf(p[i][j]));
+                if (counter != 1) builder.append(", ");
+                counter--;
+            }
+        }
+
+        return builder.toString();
     }
 }

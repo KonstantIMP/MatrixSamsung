@@ -77,6 +77,28 @@ public class Matrix {
         return new Matrix(res);
     }
 
+    public int search(int n){
+        int index = -1;
+
+        for (int i = 0; i < dimension.getRows(); i++) {
+            for (int j = 0; j < dimension.getColumns(); j++) {
+                if (p[i][j] == n) index = i * dimension.getColumns() + j;
+                if (index != -1) break;
+            }
+            if (index != -1) break;
+        }
+
+        return index;
+    }
+
+    public int argmax() {
+        return search(max());
+    }
+
+    public int argmin() {
+        return search(min());
+    }
+
     public Matrix mul(Matrix m) throws Exception {
         if (dimension.getColumns() != m.dimension.getRows())
             throw new Exception("Cannot mul matrix with this size");

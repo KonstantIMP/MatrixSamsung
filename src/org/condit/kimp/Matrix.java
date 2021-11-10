@@ -99,6 +99,44 @@ public class Matrix {
         return m;
     }
 
+    public int sum() {
+        int s = 0;
+
+        for (int i = 0; i < dimension.getRows(); i++) {
+            for (int j = 0; j < dimension.getColumns(); j++) {
+                s += p[i][j];
+            }
+        }
+
+        return s;
+    }
+
+    public int trace() throws Exception {
+        if (dimension.getColumns() != dimension.getRows())
+            throw new Exception("Cannot trace non square matrix");
+
+        int t = 0;
+
+        for (int i = 0; i < dimension.getRows(); i++) {
+            t += p[i][i];
+        }
+
+        return t;
+    }
+
+    public int getElement(int index) throws Exception {
+        if (index >= dimension.getRows() + dimension.getColumns())
+            throw new Exception("Incorrect element index");
+
+        return p[index / dimension.getColumns()][index % dimension.getColumns()];
+    }
+
+    public int getElement(int x, int y) throws Exception {
+        if (x >= dimension.getColumns() || y >= dimension.getRows())
+            throw new Exception("Incorrect element index");
+        return this.getElement(x + y * dimension.getColumns());
+    }
+
     @Override
     public String toString(){
         StringBuilder builder = new StringBuilder();

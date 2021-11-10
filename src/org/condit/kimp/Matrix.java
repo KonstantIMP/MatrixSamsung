@@ -77,6 +77,25 @@ public class Matrix {
         return new Matrix(res);
     }
 
+    public Matrix mul(Matrix m) throws Exception {
+        if (dimension.getColumns() != m.dimension.getRows())
+            throw new Exception("Cannot mul matrix with this size");
+
+        int [][] res = new int[Math.max(dimension.getColumns(), m.dimension.getColumns())][Math.max(dimension.getRows(), m.dimension.getRows())];
+        Dimension resSize = new Dimension(Math.max(dimension.getColumns(), m.dimension.getColumns()), Math.max(dimension.getRows(), m.dimension.getRows()));
+
+        for (int i = 0; i < resSize.getRows(); i++) {
+            for (int j = 0; j < resSize.getColumns(); j++) {
+                res[i][j] = 0;
+                for (int k = 0; k < dimension.getColumns(); k++) {
+                    res[i][j] += p[i][k] * m.p[k][j];
+                }
+            }
+        }
+
+        return new Matrix(res);
+    }
+
     public int max() {
         if (dimension.getColumns() == 0 || dimension.getRows() == 0) return 0;
         int m = p[0][0];

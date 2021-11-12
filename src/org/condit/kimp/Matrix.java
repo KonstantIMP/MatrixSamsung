@@ -1,8 +1,109 @@
 package org.condit.kimp;
 
+import java.util.Random;
+
 public class Matrix {
     private int [][] p;
     private Dimension dimension;
+
+    public static Matrix createNull(int n, int m) {
+        int [][] res = new int[n][m];
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                res[i][j] = 0;
+            }
+        }
+
+        return new Matrix(res);
+    }
+
+    public static Matrix createUnit(int n) {
+        int [][] res = new int[n][n];
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                res[i][j] = 0;
+                if (i == j) res[i][j] = 1;
+            }
+        }
+
+        return new Matrix(res);
+    }
+
+    public static Matrix genRandomLogical(int n, int m) {
+        int [][] res = new int[n][m];
+
+        Random rand = new Random();
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++){
+                res[i][j] = rand.nextInt() % 2;
+            }
+        }
+
+        return new Matrix(res);
+    }
+
+    public static Matrix genRange(int first, int last, int n) throws Exception {
+        if ((last - first + 1) % n != 0) throw new Exception("Impossible num of elements per line");
+
+        int [] tmp = new int[last - first + 1];
+        for (int i = first; i <= last; i++) tmp[i - first] = i;
+
+        return new Matrix(tmp, n);
+    }
+
+    public static Matrix genSnake(int first, int last, int n) throws Exception {
+        if ((last - first + 1) % n != 0) throw new Exception("Impossible num of elements per line");
+
+        int [][] res = new int[(last - first + 1) / n][n];
+        int ct = first;
+
+        for (int i = 0; i < res.length; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i % 2 == 0) res[i][j] = ct;
+                else res[i][n - j - 1] = ct;
+                ct++;
+            }
+        }
+
+        return new Matrix(res);
+    }
+
+    public Matrix transpose() {
+        int [][] res = new int[dimension.getColumns()][dimension.getRows()];
+
+        for (int i = 0; i < dimension.getRows(); i++) {
+            for (int j = 0; j < dimension.getRows(); j++) {
+                res[j][i] = p[i][j];
+            }
+        }
+
+        return new Matrix(res);
+    }
+
+    public boolean isDiagonal() {
+        if (dimension.getColumns() != dimension.getRows()) return false;
+
+        for (int i = 0; i < dimension.getRows(); i++) {
+            for (int j = 0; j < dimension.getColumns(); j++) {
+                if(i == j) {
+                    if (p[i][j] == 0) return false;
+                    continue;
+                }
+                else if(p[i][j] != 0) return false;
+            }
+        }
+
+        return true;
+    }
+
+    public double mean() throws Exception {
+        if (dimension.getColumns() * dimension.getColumns() == 0)
+            throw new Exception("Empty matrix");
+        return (double)this.sum() / (double)(dimension.getColumns() * dimension.getColumns());
+    }
 
     public Matrix() {
         p = new int[0][0];
@@ -39,6 +140,10 @@ public class Matrix {
         this(c.p);
     }
 
+    public Dimension getDimension() {
+        return dimension;
+    }
+
     public Matrix sum(Matrix m) throws Exception {
         if (dimension.getColumns() != m.dimension.getColumns() || dimension.getRows() != m.dimension.getRows()) throw new Exception("Incorrect matrix size");
         int [][] res = new int[dimension.getRows()][dimension.getColumns()];
@@ -71,6 +176,18 @@ public class Matrix {
         for (int i = 0; i < dimension.getRows(); i++) {
             for (int j = 0; j < dimension.getColumns(); j++) {
                 res[i][j] = p[i][j] * m;
+            }
+        }
+
+        return new Matrix(res);
+    }
+
+    public Matrix div(int n) {
+        int [][] res = new int[dimension.getRows()][dimension.getColumns()];
+
+        for (int i = 0; i < dimension.getRows(); i++) {
+            for (int j = 0; j < dimension.getColumns(); j++) {
+                res[i][j] = p[i][j] / n;
             }
         }
 
